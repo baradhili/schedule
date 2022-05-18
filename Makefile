@@ -4,7 +4,6 @@ TESTS ?= $(shell find test -name "*-test.js")
 all: \
 	schedule.js \
 	schedule.min.js \
-	bower.json \
 	package.json
 
 .PHONY: clean all test test-cov
@@ -26,7 +25,6 @@ schedule-cov.js: schedule.js
 		--no-instrument=sort/index.js \
 		--no-instrument=start.js \
 		--no-instrument=end.js \
-		--no-instrument=bower.js \
 		--no-instrument=package.js
 	node_modules/.bin/smash src-cov/schedule.js > schedule-cov.js
 	@chmod a-w $@
@@ -55,5 +53,5 @@ package.json: src/package.js schedule.js
 	@chmod a-w $@
 
 clean:
-	rm -f schedule*.js package.json bower.json
+	rm -f schedule*.js package.json
 	
