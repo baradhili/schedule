@@ -16,6 +16,8 @@ schedule.tasks = function() {
       resources = tasksResources,
       dependsOn = tasksDependsOn,
       minSchedule = tasksMinSchedule,
+      cost = tasksCost,
+      group = tasksGroup,
       priority = tasksPriority;
 
   /**
@@ -29,6 +31,8 @@ schedule.tasks = function() {
         fresources = schedule.functor(resources),
         fdependsOn = schedule.functor(dependsOn),
         fminschedule = schedule.functor(minSchedule),
+        fcosts = schedule.functor(cost),
+        fgroup = schedule.functor(group),
         fpriority = schedule.functor(priority);
 
     for(var i = 0, len = data.length; i < len; i++) {
@@ -40,6 +44,8 @@ schedule.tasks = function() {
             resources: fresources.call(this, task, i),
             dependsOn: fdependsOn.call(this, task, i),
             minSchedule: fminschedule.call(this, task, i),
+            cost: cost.call(this, task, i),
+            group: group.call(this, task, i),
             priority: fpriority.call(this, task, i)
           };
 
@@ -116,6 +122,28 @@ schedule.tasks = function() {
   };
 
   /**
+  * The function or value that should be used to generate the cost. Sets the
+  * value to the argument passed in, returns current value if no arguments are
+  * passed in.
+  */
+  tasks.cost = function(_) {
+    if (!arguments.length) return minSchedule;
+    cost = _;
+    return tasks;
+  };
+
+  /**
+  * The function or value that should be used to generate the group. Sets the
+  * value to the argument passed in, returns current value if no arguments are
+  * passed in.
+  */
+  tasks.group = function(_) {
+    if (!arguments.length) return minSchedule;
+    group = _;
+    return tasks;
+  };
+
+  /**
   * The function or value that should be used to generate the priority. Sets the
   * value to the argument passed in, returns current value if no arguments are
   * passed in.
@@ -169,6 +197,20 @@ function tasksDependsOn(d) {
 */
 function tasksMinSchedule(d) {
   return d.minSchedule;
+}
+
+/**
+* The default min schedule function.
+*/
+function tasksCost(d) {
+  return d.cost;
+}
+
+/**
+* The default min schedule function.
+*/
+function tasksGroup(d) {
+  return d.group;
 }
 
 /**
